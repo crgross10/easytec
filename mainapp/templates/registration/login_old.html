@@ -1,0 +1,133 @@
+{% load static %}
+{% load login_email %}
+<html><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'mainapp/img/logo_u.png' %}">
+    <title>Undergym - Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'mainapp/dist/css/style.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'mainapp/dist/css/pages/authentication.css'%}" >
+
+    <style>
+    img{
+    	max-width:30%;
+    	height:auto;
+    }
+</style>
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <div class="preloader" style="display: none;">
+            <div class="loader">
+                <div class="loader__figure"></div>
+                <p class="loader__label">Undergym Sistema</p>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- Preloader - style you can find in spinners.css -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Login box.scss -->
+        <!-- ============================================================== -->.
+        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center" style="background:url('../../static/mainapp/img/a4bg.jpg') no-repeat center center;">
+            <div class="auth-box">
+                <div id="loginform">
+                    <div class="logo align-items-center">
+                        <span class="db"><img src="{% static 'mainapp/img/logo_login1.png' %}" alt="logo"></span>
+
+                    </div>
+                    <!-- Form -->
+                    <div class="row">
+                        <form class="col s12" action="{% url 'website:login' %}" method="POST">
+                            {% csrf_token %}
+
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input  name="username" type="text"  >
+                                    <label for="username">Username</label>
+                                </div>
+
+
+                                <div class="input-field col s12">
+                                    <input id="password" name="password"  type="password">
+                                    <label for="password">Password</label>
+                                </div>
+
+                            </div>
+                            <!-- pwd -->
+                            <div class="row m-t-5 center">
+                                <p style="color:red;"> {{ msg }}</p>
+
+
+                                <div class="col s4">
+
+                                </div>
+                                <div class="col s8 right-align"><a href="#" class="link" id="to-recover">Esqueceu sua senha?</a></div>
+
+
+                            </div>
+                            <!-- pwd -->
+                            <div class="row m-t-40">
+                                <div class="col s12">
+                                    <button class="btn-large w100 light-green accent-4" type="submit">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div id="recoverform">
+                    <div class="logo">
+                        <span class="db"><img src="{% static 'mainapp/img/logo_resumo.png' %}" alt="logo"></span>
+                        <h5 class="font-medium m-b-20">Recuperação de senha</h5>
+                        <span>Informe seu e-mail que eniaremos a nova senha para você!</span>
+                    </div>
+                    <div class="row">
+
+                        <form class="col s12"method="POST">
+                             {% csrf_token %}
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="email" type="email" name="email" class="validate" required="">
+                                    <label for="email">Email</label>
+                                </div>
+                            </div>
+
+                            <div class="row m-t-20">
+                                <div class="col s12">
+                                    <button class="btn-large w100 red" type="submit">Enviar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script  type="text/javascript" src="{% static 'mainapp/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+    <script  type="text/javascript" src="{% static 'mainapp/dist/js/materialize.min.js' %}"></script>
+
+    <script>
+    $('.tooltipped').tooltip();
+    $('#to-recover').on("click", function() {
+        $("#loginform").slideUp();
+        $("#recoverform").fadeIn();
+    });
+    $(function() {
+        $(".preloader").fadeOut();
+    });
+
+
+
+
+    </script><div class="material-tooltip"><div class="tooltip-content"></div></div><div class="material-tooltip"><div class="tooltip-content"></div></div>
+
+
+</body></html>

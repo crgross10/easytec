@@ -1,0 +1,76 @@
+.align-data{
+    text-align: center;
+}
+
+.align-number{
+    text-align: right;
+}
+
+.align-checkbox{
+    text-align: center;
+}
+
+.btcadastrar {
+  background-color: #00c853;
+}
+
+.btexcluir {
+  background-color: #d32f2f;
+}
+.btatualizar {
+  background-color: #9c27b0;
+}
+
+.btpesquisar {
+  background-color: #9c27b0;
+}
+
+.btvoltar {
+  background-color: #9c27b0;
+}
+
+.btcancelar {
+  background-color: #9c27b0;
+}
+
+.btenviar {
+  background-color: #d32f2f;
+}
+
+.icon-delete {
+    color: #d50000;
+}
+
+.icon-edit {
+    color: white;
+}
+/*ação dentro das tabelas*/
+.icon-edit2 {
+    color: #aa00ff  ;
+}
+
+.icon-cadastrar {
+    color: #64dd17;
+}
+
+.bt-icon-search {
+    background: transparent;
+    border: none !important;
+    font-size:0;
+    color: #9c27b0;
+}
+
+.icon-contrato-venda {
+   color: #ff9800 ;
+}
+.icon-contrato-compra {
+   color: #00838f;
+}
+
+.icon-add {
+   color: #00695c;
+}
+
+.icon-return {
+   color: #9c27b0;
+}

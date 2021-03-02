@@ -1,0 +1,513 @@
+{% extends "layouts/base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% load easy_mask %}
+
+{% block title %} Niveis de Curso{% endblock %}
+
+{% block conteudo %}
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Níveis de Curso</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Níveis de Curso</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+
+       <!-- /.card -->
+
+
+      <!-- SELECT2 EXAMPLE -->
+      <div class="card card-default">
+        <div class="card-header">
+          <h3 class="card-title">FILTROS</h3>
+
+          <div class="card-tools">
+
+
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <form class="form-action" method="get" >
+          {% csrf_token %}
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="col-md-6">
+                          <span class="input-group-addon"><label for="curso">Selecione o Curso</label></span>
+                          <select class="form-control select2" style="width: 100%;" name="pesquisa_curso" id="pesquisa_curso" >
+                            {%for c in cursos %}
+                            <option>{{c}}</option>
+                            {% endfor%}
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" onclick="filtrar()" style="margin-top: 6.5%;" type="submit"> <i class="fas fa-search"> </i> Filtrar níveis</button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="card card-default">
+        <form class="form-action" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+        <div class="card-header">
+          <h3 class="card-title">CRUD</h3>
+
+          <div class="card-tools">
+              <a class="btn btn-primary" href="#" onclick="SalvarNivelCurso()"  role="button"><i class="fas fa-save"></i> Salvar</a>
+
+          </div>
+        </div>
+        <!-- /.card-header -->
+
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <form class="form-inline">
+                  <div class="form-group">
+                      <div class="input-group">
+                        <div class="col-md-6">
+                          <span class="input-group-addon"><label for="curso">Nível</label></span>
+                          <select class="form-control select2" style="width: 100%;" id="selectnivel" >
+                            {%for n in form.nivel %}
+                            <option value="{{n.value}}">{{n}}</option>
+                            {% endfor%}
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <label>Ordem</label>
+                              {% render_field form.ordem class+="form-control" id="ordem" %}
+                        </div>
+                        <div class="col-md-2"  style="display:none;">
+                          <label>ID</label>
+                            <input type="text" class="form-control" id="id" name="id">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                          <div class="col-md-10">
+                            <label>Livro</label>
+                                {% render_field form.livro class+="form-control"  id="livro" %}
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="input-group">
+                            <div class="col-md-6">
+                              <label>Editora</label>
+                                  {% render_field form.editora class+="form-control" id="editora"  %}
+                            </div>
+                            <div class="col-md-2">
+                              <label>Edição</label>
+                                  {% render_field form.edicao class+="form-control"  id="edicao"%}
+                            </div>
+                            <div class="col-md-2">
+                              <label>ISBN</label>
+                                  {% render_field form.isbn class+="form-control" id="isbn" %}
+                            </div>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="input-group">
+                            <div class="col-md-2">
+                              <span class="input-group-addon"><label for="curso">Ativo</label></span>
+                              <select class="form-control select2" style="width: 100%;" id="ativo">
+                                {%for a in form.ativo %}
+                                <option value="{{a.value}}">{{a}}</option>
+                                {% endfor%}
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <span class="input-group-addon"><label for="curso">Gera Certificado</label></span>
+                              <select class="form-control select2" style="width: 100%;" id="gera_certificado">
+                                {%for g in form.gera_certificado %}
+                                <option value="{{g.value}}">{{g}}</option>
+                                {% endfor%}
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <label>Carga Horária</label>
+                                  {% render_field form.carga_horaria class+="form-control" id="carga_horaria" %}
+                            </div>
+                            <div class="col-md-2">
+                              <span class="input-group-addon"><label for="curso">Iniciante</label></span>
+                              <select class="form-control select2" style="width: 100%;" id="iniciante">
+                                {%for i in form.iniciante %}
+                                <option value="{{i.value}}">{{i}}</option>
+                                {% endfor%}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                          <div class="form-group">
+                              <div class="input-group">
+                                <div class="col-md-4">
+                                  <label>Idade Inicial</label>
+                                      {% render_field form.idade_inicial class+="form-control" id="idade_inicial"  %}
+                                </div>
+                                <div class="col-md-4">
+                                  <label>Idade Final</label>
+                                      {% render_field form.idade_final class+="form-control" id="idade_final"  %}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                  <div class="col-md-2">
+                                    <span class="input-group-addon"><label for="curso">Falta Reprova</label></span>
+                                    <select class="form-control select2" style="width: 100%;" id="falta_reprova">
+                                      {%for fr in form.falta_reprova %}
+                                      <option value="{{fr.value}}">{{fr}}</option>
+                                      {% endfor%}
+                                    </select>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <span class="input-group-addon"><label for="curso">Nota Reprova</label></span>
+                                    <select class="form-control select2" style="width: 100%;" id="nota_reprova">
+                                      {%for nr in form.nota_reprova %}
+                                      <option value="{{nr.value}}">{{nr}}</option>
+                                      {% endfor%}
+                                    </select>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <span class="input-group-addon"><label for="curso">Modalidade</label></span>
+                                    <select class="form-control select2" style="width: 100%;" id="modalidade">
+                                      {%for m in form.modalidade %}
+                                      <option value="{{m.value}}">{{m}}</option>
+                                      {% endfor%}
+                                    </select>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <span class="input-group-addon"><label for="curso">Curso</label></span>
+                                    <select class="form-control select2" style="width: 100%;" id="curso">
+                                      {%for cr in form.curso %}
+                                      <option value="{{cr.value}}">{{cr}}</option>
+                                      {% endfor%}
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                  <div class="input-group">
+                                    <div class="col-md-4 my-colorpicker1 colorpicker-element">
+                                      <label>FontColor <i class="fas fa-square"></i></label>
+                                      {% render_field form.font_color class+="form-control input-group-text" id="font_color" %}
+
+                                    </div>
+                                    <div class="col-md-4 my-colorpicker2 colorpicker-element" >
+                                          <label>Background <i class="fas fa-square"></i></label>
+                                          {% render_field form.backgroud class+="form-control input-group-text"  id="background"%}
+                                    </div>
+                                  </div>
+                                </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            </form>
+          </div>
+
+          <div class="card">
+  <div class="card-header">
+    <h3 class="card-title">LISTA DE NÍVEIS (GRID)</h3>
+  </div>
+  <!-- /.card-header -->
+  <div class="card-body">
+
+    {% if niveis_curso|length > 0 %}
+    <table id="example1" class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>Ações</th>
+        <th>Ativo</th>
+        <th>Curso</th>
+        <th>Nivel ID</th>
+        <th>Descrição</th>
+        <th>Livro</th>
+        <th>Editora</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for nc in niveis_curso %}
+      <tr>
+
+
+        <td>
+          <div class="btn-group">
+              <a class="btn-sm btn-primary"  onclick="EditarNivelCurso({{nc.id}})"  role="button"><i class="fas fa-edit"></i> Editar</a>
+              <a class="btn-sm btn-primary bg-gradient-danger" href="#" onclick="ExcluirNivelCurso({{nc.id}})"  role="button"><i class="fas fa-trash-alt"></i> Excluir</a>
+            </div>
+        </td>
+        <td>{% if nc.ativo == 1 %}<span class="badge badge-success">ativo</span>{% else %}<span class="badge badge-danger">inativo</span>{% endif %}</td>
+        <td>{% if nc.curso == 0 %} Inglês {% elif  nc.curso == 1 %} Espanhol {% elif  nc.curso == 2 %} Psicologia {% elif  nc.curso == 3 %} Informática {% else %} Matemática {% endif %} </td>
+        <td>{{nc.id}}</td>
+        <td>{% if nc.nivel == 0 %} STARTER {% elif  nc.nivel == 1 %} 1A {% elif  nc.nivel == 2 %} 1B {% elif  nc.nivel == 3 %} 2A {% else %} 2B {% endif %} </td>
+        <td>{{nc.livro}}</td>
+        <td>{{nc.editora}}</td>
+      </tr>
+      {%endfor%}
+
+      </tbody>
+      <tfoot>
+      <tr>
+        <th>Ações</th>
+        <th>Ativo</th>
+        <th>Curso</th>
+        <th>Nivel ID</th>
+        <th>Descrição</th>
+        <th>Livro</th>
+        <th>Editora</th>
+      </tr>
+      </tfoot>
+    </table>
+    {% else %}
+    <div class="center mt-5 mb-5 jumbotron">
+        <h5>Nenhum <code>Nível</code> cadastrado ou encontrado.</h5>
+    </div>
+    {% endif %}
+  </div>
+  <!-- /.card-body -->
+</div>
+
+
+      </div>
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+  $(function() {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
+  });
+
+  function SalvarNivelCurso() {
+                var id= document.getElementById('id').value;
+                var nivel= document.getElementById('selectnivel').value;
+                var ordem= document.getElementById('ordem').value;
+                var livro= document.getElementById('livro').value;
+                var editora= document.getElementById('editora').value;
+                var edicao= document.getElementById('edicao').value;
+                var isbn= document.getElementById('isbn').value;
+                var ativo= document.getElementById('ativo').value;
+                var gera_certificado= document.getElementById('gera_certificado').value;
+                var carga_horaria= document.getElementById('carga_horaria').value;
+                var iniciante= document.getElementById('iniciante').value;
+                var idade_inicial= document.getElementById('idade_inicial').value;
+                var idade_final= document.getElementById('idade_final').value;
+                var falta_reprova= document.getElementById('falta_reprova').value;
+                var nota_reprova= document.getElementById('nota_reprova').value;
+                var modalidade= document.getElementById('modalidade').value;
+                var curso= document.getElementById('curso').value;
+                var font_color= document.getElementById('font_color').value;
+                var background= document.getElementById('background').value;
+
+
+                if (nivel == ''){
+                  alert('Informe o nivel');
+                  document.getElementById('nivel').focus();
+                } else if (ordem =='0') {
+                  alert('Informe a ordem');
+                  document.getElementById('ordem').focus();
+                } else if (livro =='') {
+                  alert('Informe o livro');
+                  document.getElementById('livro').focus();
+                } else if (editora =='') {
+                  alert('Informe a editora');
+                  document.getElementById('editora').focus();
+                } else if (edicao =='') {
+                  alert('Informe a edição');
+                  document.getElementById('edicao').focus();
+                } else if (isbn =='') {
+                  alert('Informe o isbn');
+                  document.getElementById('isbn').focus();
+                } else if (carga_horaria =='') {
+                  alert('Informe a carga horaria');
+                  document.getElementById('carga_horaria').focus();
+                } else if (idade_inicial =='') {
+                  alert('Informe a idade Inicial');
+                  document.getElementById('idade_inicial').focus();
+                } else if (idade_final =='') {
+                  alert('Informe a idade final');
+                  document.getElementById('idade_final').focus();
+                } else if (font_color =='') {
+                  alert('Informe a font color');
+                  document.getElementById('font_color').focus();
+                } else if (background =='') {
+                  alert('Informe a background');
+                  document.getElementById('background').focus();
+                } else{
+
+                        $.ajax({
+                                method: 'POST',
+                                url: '{% url "website:lista_nivelcurso" %}',
+                                data: {
+                                    'id':id,
+                                    'nivel': nivel,
+                                    'ordem': ordem,
+                                    'livro': livro,
+                                    'editora': editora,
+                                    'edicao': edicao,
+                                    'isbn':isbn,
+                                    'ativo':ativo,
+                                    'gera_certificado':gera_certificado,
+                                    'carga_horaria':carga_horaria,
+                                    'iniciante':iniciante,
+                                    'idade_inicial':idade_inicial,
+                                    'idade_final':idade_final,
+                                    'falta_reprova':falta_reprova,
+                                    'nota_reprova':nota_reprova,
+                                    'modalidade':modalidade,
+                                    'curso':curso,
+                                    'font_color':font_color,
+                                    'background':background,
+                                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                                },
+                                success: function(data) {
+
+                                     alert('Salvo com sucesso!');
+
+                                   }
+                            })
+                            .done(function(response) {
+                              document.location.reload(true);
+
+                             })
+                            .fail(function() {
+                                console.log("Error Occured");
+                            });
+              }
+            }
+
+          function ExcluirNivelCurso(id) {
+
+                                  $.ajax({
+                                          method: 'POST',
+                                          url: '{% url "website:deleta_nivelcurso"  %}',
+                                          data: {
+                                              'id': id,
+                                              'csrfmiddlewaretoken': '{{ csrf_token }}',
+                                          },
+                                          success: function(data) {
+
+                                               alert('Excluído com sucesso!');
+
+                                             }
+                                      })
+                                      .done(function(response) {
+                                        document.location.reload(true);
+
+                                       })
+                                      .fail(function() {
+                                          console.log("Error Occured");
+                                      });
+                        }
+
+            function EditarNivelCurso(id) {
+
+                           const url = '{% url "website:atualiza_nivelcurso" %}'
+                           const body = { id: id }
+
+                             fetch(url, {
+                             headers: { "Content-Type": "application/json; charset=UTF-8","X-CSRFToken": '{{csrf_token}}' },
+                             method: 'POST',
+                             body: JSON.stringify(body)
+                             })
+                           .then((res) => res.json() )
+                           .then((response) =>  atribuirCampos(response))
+             //.then((response) =>  atribuirCampos(JSON.stringify(response.dados.protocolo),JSON.stringify(response.dados.data)))
+                     }
+
+             function atribuirCampos(response) {
+
+               const id = document.querySelector("#id");
+               const ordem = document.querySelector("#ordem");
+               const livro = document.querySelector("#livro");
+               const editora = document.querySelector("#editora");
+               const edicao = document.querySelector("#edicao");
+               const isbn = document.querySelector("#isbn");
+               const carga_horaria = document.querySelector("#carga_horaria");
+               const idade_inicial = document.querySelector("#idade_inicial");
+               const idade_final = document.querySelector("#idade_final");
+               const font_color = document.querySelector("#font_color");
+               const background = document.querySelector("#background");
+
+               id.value = response.id;
+               $('#selectnivel').val(response.nivel).select2();
+               ordem.value = response.ordem;
+               livro.value = response.livro;
+               editora.value = response.editora;
+               edicao.value = response.edicao;
+               isbn.value = response.isbn;
+               $('#ativo').val(response.ativo).select2();
+               $('#gera_certificado').val(response.gera_certificado).select2();
+               carga_horaria.value = response.carga_horaria;
+               $('#iniciante').val(response.iniciante).select2();
+               idade_inicial.value = response.idade_inicial;
+               idade_final.value = response.idade_final;
+               $('#falta_reprova').val(response.falta_reprova).select2();
+               $('#nota_reprova').val(response.nota_reprova).select2();
+               $('#modalidade').val(response.modalidade).select2();
+               $('#curso').val(response.curso).select2();
+               font_color.value = response.font_color;
+               background.value = response.backgroud;
+               document.getElementById('selectnivel').focus();
+
+
+
+
+           }
+
+
+
+
+
+</script>
+
+
+
+
+{% endblock %}
